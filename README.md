@@ -85,6 +85,6 @@ As soon as the server rests, a random rest period Tr is generated using the Rand
 
 -An arriving customer is a greedy customer with probability Pg. To decide whether a typical or greedy customer is created, a random number uniformly drawn from [0, 1] is generated with the RandomGenerator method genCustomerType(). If the value returned is less than Pg, a greedy customer is generated, otherwise, a typical customer is generated.
 
-A sample input and output will be included in the demo folder as a .jpeg file
+A sample input and output will be included in the folder labelled 'demo' as a .jpeg file
 
 
