@@ -22,15 +22,16 @@ Taking a Rest
 
 The human servers are allowed to take occasional breaks. When a server finishes serving a customer, there is a probability Pr that the server takes a rest for a random amount of time T. During the break, the server does not serve the next waiting customer. Upon returning from the break, the server serves the next customer in the queue immediately.
 
+
 Self-Checkout
 
 To reduce waiting time, self-checkout counters have been set-up. These self-checkout counters are automated and never need to rest. Customers queue up for the self-checkout counter in the same way as human servers. There is one shared queue for all self-checkout counter.
 
 Customers' Choice of Queue
 
-As before, when a customer arrives, he or she first scans through the servers (in order, from 1 to k) to see if there is an idle server (i.e. not serving a customer and not resting). If there is one, the customer will go to the server to be served. Otherwise, a typical customer just chooses the first queue (while scanning from servers 1 to k) that is still not full to join. However, other than the typical customer, a greedy customer is introduced that always chooses the queue with the fewest customers to join. In the case of a tie, the customer breaks the tie by choosing the first one while scanning from servers 1 to k.
+As before, when a customer arrives, he or she first scans through the servers (in order, from 1 to k) to see if there is an idle server (i.e. not serving a customer and not resting). If there is one, the customer will go to the server to be served. Otherwise, a typical customer just chooses the first queue (while scanning from servers 1 to k) that is still not full to join. 
 
-If a customer cannot find any queue to join, it will leave the shop.
+However, other than the typical customer, a greedy customer is introduced that always chooses the queue with the fewest customers to join. In the case of a tie, the customer breaks the tie by choosing the first one while scanning from servers 1 to k.If a customer cannot find any queue to join, it will leave the shop.
 
 Randomized Arrival and Service Time
 
@@ -72,3 +73,18 @@ To run this program,
       7. a positive double parameter for the service rate, μ
       8. a positive double parameter for the resting rate, ρ
       9. a double parameter for the probability of resting, Pr
+      10. a double parameter for the probability of a greedy customer occurging, Pg
+
+-Each queue has a maximum capacity Qmax, and a customer cannot join a queue that is full. Note that a customer being served is not inside the queue. When a customer arrives and all the queues are full, then the customer leaves.
+
+-To decide if the server should rest, a random number uniformly drawn from [0, 1] is generated using the RandomGenerator method genRandomRest(). If the value returned is less than Pr, the server rests with a SERVER_REST event generated. Otherwise, it continues serving the next customer.
+
+As soon as the server rests, a random rest period Tr is generated using the RandomGenerator method genRestPeriod(). This variable is an exponential random variable, governed by the resting rate, ρ. A SERVER_BACK event will be scheduled at Tr + now.
+
+-There are Nself self-checkout counters set up. In particular, if there are k human servers, then the self-checkout counters are identified from k + 1 onwards. All self-checkout counters share the same queue. When we print out the wait event, we always say that the customer is waiting for the self-checkout counter k + 1, even though this customer may eventually be served by another self-checkout counter
+
+-An arriving customer is a greedy customer with probability Pg. To decide whether a typical or greedy customer is created, a random number uniformly drawn from [0, 1] is generated with the RandomGenerator method genCustomerType(). If the value returned is less than Pg, a greedy customer is generated, otherwise, a typical customer is generated.
+
+A sample input and output will be included in the demo folder as a .jpeg file
+
+
